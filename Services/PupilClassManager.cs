@@ -2,6 +2,7 @@ using SchoolManager.Models;
 using SchoolManager.Models.Db;
 using SchoolManager.Models.Diff;
 using SchoolManager.Models.Exceptions;
+using SchoolManager.Models.Extensions;
 using SchoolManager.Services.Validators;
 
 namespace SchoolManager.Services;
@@ -25,17 +26,17 @@ public class PupilClassManager
 
             var pupilEntity = newState.GetPupilForAssignment(assignment);
 
-            if (!string.IsNullOrWhiteSpace(pupilEntity.ClassName)) 
+            if (pupilEntity.IsInClass()) 
             {
                 newState.RemovePupilFromPreviousClass(pupilEntity);
             }
 
             var classEntity = newState.GetClassForPupilAssignment(assignment);
 
-            if (classEntity.AmountOfPupils + 1 <= classEntity.MaxAmountOfPupils)
+            if (classEntity.CanAddPupil())
             {
-                pupilEntity.ClassName = classEntity.ClassName;
-                classEntity.AmountOfPupils += 1;
+                pupilEntity.AssignToClass(classEntity);
+                classEntity.AmountOfPupils++;
             }
             else
             {
