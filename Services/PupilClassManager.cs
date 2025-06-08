@@ -1,6 +1,7 @@
 using SchoolManager.Models;
 using SchoolManager.Models.Db;
 using SchoolManager.Models.Diff;
+using SchoolManager.Models.Exceptions;
 
 namespace SchoolManager.Services;
 
@@ -18,7 +19,12 @@ public class PupilClassManager
         foreach (var assignment in request.Assignments)
         {
             
-            var pupilEntity = newState.Pupils.First(x => x.Id == assignment.PupilId);
+
+            var pupilEntity = newState.Pupils.FirstOrDefault(x => x.Id == assignment.PupilId);
+            if (pupilEntity is null) 
+            {
+                throw new PupilNotFoundException(String.Format("Pupil with id {0} does not exist.", assignment.PupilId));
+            }
 
             if (!string.IsNullOrWhiteSpace(pupilEntity.ClassName)) 
             {

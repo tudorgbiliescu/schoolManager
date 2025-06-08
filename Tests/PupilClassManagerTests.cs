@@ -1,6 +1,7 @@
 using SchoolManager.Models;
 using SchoolManager.Models.Db;
 using SchoolManager.Models.Diff;
+using SchoolManager.Models.Exceptions;
 using SchoolManager.Services;
 
 namespace SchoolManager.Tests;
@@ -512,7 +513,7 @@ public class PupilClassManagerTests
         var sut = new PupilClassManager();
 
         // Act & Assert
-        var ex = Assert.Throws<Exception>(() => sut.UpdatePupilClassDivision(initialState, incomingRequest));
+        var ex = Assert.Throws<PupilNotFoundException>(() => sut.UpdatePupilClassDivision(initialState, incomingRequest));
         Assert.Equal("Pupil with id 3 does not exist.", ex.Message);
     }
 
