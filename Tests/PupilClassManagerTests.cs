@@ -465,7 +465,7 @@ public class PupilClassManagerTests
         };
         var sut = new PupilClassManager();
         // Act & Assert
-        var ex = Assert.Throws<Exception>(() => sut.UpdatePupilClassDivision(initialState, incomingRequest));
+        var ex = Assert.Throws<ClassNotFoundException>(() => sut.UpdatePupilClassDivision(initialState, incomingRequest));
         Assert.Equal("Class with id 2 does not exist.", ex.Message);
     }
 
@@ -572,7 +572,7 @@ public class PupilClassManagerTests
         var sut = new PupilClassManager();
 
         // Act & Assert
-        var ex = Assert.Throws<MultiplePupilAssignments>(() => sut.UpdatePupilClassDivision(initialState, incomingRequest));
+        var ex = Assert.Throws<MultiplePupilAssignmentsException>(() => sut.UpdatePupilClassDivision(initialState, incomingRequest));
         Assert.Equal("Duplicate pupil IDs provided: 1.", ex.Message);
     }
 

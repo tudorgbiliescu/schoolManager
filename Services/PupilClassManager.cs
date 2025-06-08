@@ -22,7 +22,7 @@ public class PupilClassManager
 
             if (_assignedPupilIds.ContainsKey(assignment.PupilId))
             {
-                throw new MultiplePupilAssignments(String.Format("Duplicate pupil IDs provided: {0}.", assignment.PupilId));            }
+                throw new MultiplePupilAssignmentsException(String.Format("Duplicate pupil IDs provided: {0}.", assignment.PupilId));            }
             else
             {
                 _assignedPupilIds[assignment.PupilId] = assignment.PupilId;
@@ -39,7 +39,12 @@ public class PupilClassManager
                 var previousPupilClass = newState.Classes.First(x=> x.ClassName  == pupilEntity.ClassName);
                 previousPupilClass.AmountOfPupils -= 1;
             }
-            var classEntity = newState.Classes.First(x => x.Id == assignment.ClassId);
+
+            var classEntity = newState.Classes.FirstOrDefault(x => x.Id == assignment.ClassId);
+            if (classEntity is null)
+            {
+                throw new ClassNotFoundException(String.Format("Class with id {0} does not exist.", assignment.ClassId));
+            }
 
             if (classEntity.AmountOfPupils + 1 <= classEntity.MaxAmountOfPupils)
             {
