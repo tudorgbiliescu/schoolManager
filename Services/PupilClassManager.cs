@@ -23,16 +23,11 @@ public class PupilClassManager
 
             _assignmentValidator.ValidateAssignment(assignment);    
 
-            var pupilEntity = newState.Pupils.FirstOrDefault(x => x.Id == assignment.PupilId);
-            if (pupilEntity is null) 
-            {
-                throw new PupilNotFoundException(String.Format("Pupil with id {0} does not exist.", assignment.PupilId));
-            }
+            var pupilEntity = newState.GetPupilById(assignment.PupilId);
 
             if (!string.IsNullOrWhiteSpace(pupilEntity.ClassName)) 
             {
-                var previousPupilClass = newState.Classes.First(x=> x.ClassName  == pupilEntity.ClassName);
-                previousPupilClass.AmountOfPupils -= 1;
+                newState.RemovePupilFromPreviousClass(pupilEntity);
             }
 
             var classEntity = newState.Classes.FirstOrDefault(x => x.Id == assignment.ClassId);

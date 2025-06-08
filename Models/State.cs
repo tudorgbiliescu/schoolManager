@@ -1,4 +1,5 @@
 using SchoolManager.Models.Db;
+using SchoolManager.Models.Exceptions;
 
 namespace SchoolManager.Models;
 
@@ -20,4 +21,21 @@ public class State
     public List<Pupil> Pupils { get; set; } = new();
 
     public List<Class> Classes { get; set; } = new();
+
+    public Pupil GetPupilById(int id)
+    {
+        var pupil = Pupils.FirstOrDefault(x => x.Id == id);
+        if (pupil is null)
+        {
+            throw new PupilNotFoundException(String.Format("Pupil with id {0} does not exist.", id));
+        }
+
+        return pupil;
+    }
+
+    public void RemovePupilFromPreviousClass(Pupil pupil)
+    {
+        var previousPupilClass = Classes.First(x => x.ClassName == pupil.ClassName);
+        previousPupilClass.AmountOfPupils -= 1;
+    }
 }
