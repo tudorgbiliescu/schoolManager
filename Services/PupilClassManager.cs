@@ -12,13 +12,21 @@ namespace SchoolManager.Services;
  */
 public class PupilClassManager
 {
+    private Dictionary<int,int> _assignedPupilIds = new Dictionary<int, int>();
     public State UpdatePupilClassDivision(State state, Request request)
     {
         var newState = new State(state);
-        
+
         foreach (var assignment in request.Assignments)
         {
-            
+
+            if (_assignedPupilIds.ContainsKey(assignment.PupilId))
+            {
+                throw new MultiplePupilAssignments(String.Format("Duplicate pupil IDs provided: {0}.", assignment.PupilId));            }
+            else
+            {
+                _assignedPupilIds[assignment.PupilId] = assignment.PupilId;
+            }
 
             var pupilEntity = newState.Pupils.FirstOrDefault(x => x.Id == assignment.PupilId);
             if (pupilEntity is null) 

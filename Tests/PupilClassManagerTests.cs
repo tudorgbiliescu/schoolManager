@@ -572,8 +572,8 @@ public class PupilClassManagerTests
         var sut = new PupilClassManager();
 
         // Act & Assert
-        var ex = Assert.Throws<Exception>(() => sut.UpdatePupilClassDivision(initialState, incomingRequest));
-        Assert.Equal("Duplicate pupil IDs provided.", ex.Message);
+        var ex = Assert.Throws<MultiplePupilAssignments>(() => sut.UpdatePupilClassDivision(initialState, incomingRequest));
+        Assert.Equal("Duplicate pupil IDs provided: 1.", ex.Message);
     }
 
     [Fact]
