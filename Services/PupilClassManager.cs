@@ -51,6 +51,10 @@ public class PupilClassManager
                 pupilEntity.ClassName = classEntity.ClassName;
                 classEntity.AmountOfPupils += 1;
             }
+            else
+            {
+                throw new ClassCapacityExceededException(String.Format("Class with id {0} has too many pupils assigned.", classEntity.Id));            
+            }
 
         }
 

@@ -681,7 +681,7 @@ public class PupilClassManagerTests
         };
         var sut = new PupilClassManager();
         // Act & Assert
-        var ex = Assert.Throws<Exception>(() => sut.UpdatePupilClassDivision(initialState, incomingRequest));
-        Assert.Equal("Class First grade has too many pupils assigned.", ex.Message);
+        var ex = Assert.Throws<ClassCapacityExceededException>(() => sut.UpdatePupilClassDivision(initialState, incomingRequest));
+        Assert.Equal("Class with id 1 has too many pupils assigned.", ex.Message);
     }
 }
