@@ -627,7 +627,7 @@ public class PupilClassManagerTests
         var sut = new PupilClassManager();
 
         // Act & Assert
-        var ex = Assert.Throws<Exception>(() => sut.UpdatePupilClassDivision(initialState, incomingRequest));
+        var ex = Assert.Throws<UnassignedPupilException>(() => sut.UpdatePupilClassDivision(initialState, incomingRequest));
         Assert.Equal("Pupil with id 2 is not assigned to a class.", ex.Message);
     }
 

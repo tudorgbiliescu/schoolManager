@@ -54,6 +54,15 @@ public class PupilClassManager
 
         }
 
+        foreach (var pupilItem in newState.Pupils)
+        {
+            if (string.IsNullOrEmpty(pupilItem.ClassName))
+            {
+                throw new UnassignedPupilException(String.Format("Pupil with id {0} is not assigned to a class.", pupilItem.Id));
+            }
+        }
+
+
         foreach (var classItem in newState.Classes)
         {
             var classPupils = newState.Pupils.Where(x => x.ClassName == classItem.ClassName).OrderBy(x => x.Name).ToList();
