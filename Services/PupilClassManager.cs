@@ -2,6 +2,7 @@ using SchoolManager.Models;
 using SchoolManager.Models.Db;
 using SchoolManager.Models.Diff;
 using SchoolManager.Models.Exceptions;
+using SchoolManager.Services.Validators;
 
 namespace SchoolManager.Services;
 
@@ -12,7 +13,7 @@ namespace SchoolManager.Services;
  */
 public class PupilClassManager
 {
-    private Dictionary<int,int> _assignedPupilIds = new Dictionary<int, int>();
+    private AssignmentValidator _assignmentValidator = new AssignmentValidator();
     public State UpdatePupilClassDivision(State state, Request request)
     {
         var newState = new State(state);
@@ -20,13 +21,7 @@ public class PupilClassManager
         foreach (var assignment in request.Assignments)
         {
 
-            if (_assignedPupilIds.ContainsKey(assignment.PupilId))
-            {
-                throw new MultiplePupilAssignmentsException(String.Format("Duplicate pupil IDs provided: {0}.", assignment.PupilId));            }
-            else
-            {
-                _assignedPupilIds[assignment.PupilId] = assignment.PupilId;
-            }
+            _assignmentValidator.ValidateAssignment(assignment);    
 
             var pupilEntity = newState.Pupils.FirstOrDefault(x => x.Id == assignment.PupilId);
             if (pupilEntity is null) 
