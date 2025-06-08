@@ -23,18 +23,14 @@ public class PupilClassManager
 
             _assignmentValidator.ValidateAssignment(assignment);    
 
-            var pupilEntity = newState.GetPupilById(assignment.PupilId);
+            var pupilEntity = newState.GetPupilForAssignment(assignment);
 
             if (!string.IsNullOrWhiteSpace(pupilEntity.ClassName)) 
             {
                 newState.RemovePupilFromPreviousClass(pupilEntity);
             }
 
-            var classEntity = newState.Classes.FirstOrDefault(x => x.Id == assignment.ClassId);
-            if (classEntity is null)
-            {
-                throw new ClassNotFoundException(String.Format("Class with id {0} does not exist.", assignment.ClassId));
-            }
+            var classEntity = newState.GetClassForPupilAssignment(assignment);
 
             if (classEntity.AmountOfPupils + 1 <= classEntity.MaxAmountOfPupils)
             {
@@ -48,14 +44,7 @@ public class PupilClassManager
 
         }
 
-        foreach (var pupilItem in newState.Pupils)
-        {
-            if (string.IsNullOrEmpty(pupilItem.ClassName))
-            {
-                throw new UnassignedPupilException(String.Format("Pupil with id {0} is not assigned to a class.", pupilItem.Id));
-            }
-        }
-
+        newState.CheckIfAllPupilsAreAssigned();
 
         foreach (var classItem in newState.Classes)
         {
