@@ -47,15 +47,8 @@ public class PupilClassManager
 
         newState.CheckIfAllPupilsAreAssigned();
 
-        foreach (var classItem in newState.Classes)
-        {
-            var classPupils = newState.Pupils.Where(x => x.ClassName == classItem.ClassName).OrderBy(x => x.Name).ToList();
-            for (int i = 1; i <= classPupils.Count(); i++)
-            {
-                var pupil = classPupils[i-1];
-                pupil.FollowUpNumber = i;
-            }
-        }
+        newState.UpdateStudentOrderForClasses();
+
         return newState;
     }
 

@@ -59,4 +59,21 @@ public class State
             }
         }
     }
+
+    public void UpdateStudentOrderForClasses() {
+        foreach (var classItem in Classes)
+        {
+            OrderStudentsAlphabetically(classItem);
+        }
+    }
+
+    private void OrderStudentsAlphabetically(Class classItem)
+    {
+        var classPupils = Pupils.Where(x => x.ClassName == classItem.ClassName).OrderBy(x => x.Name).ToList();
+        for (int i = 1; i <= classPupils.Count(); i++)
+        {
+            var pupil = classPupils[i - 1];
+            pupil.FollowUpNumber = i;
+        }
+    }
 }
