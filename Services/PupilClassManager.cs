@@ -17,7 +17,14 @@ public class PupilClassManager
         
         foreach (var assignment in request.Assignments)
         {
+            
             var pupilEntity = newState.Pupils.First(x => x.Id == assignment.PupilId);
+
+            if (!string.IsNullOrWhiteSpace(pupilEntity.ClassName)) 
+            {
+                var previousPupilClass = newState.Classes.First(x=> x.ClassName  == pupilEntity.ClassName);
+                previousPupilClass.AmountOfPupils -= 1;
+            }
             var classEntity = newState.Classes.First(x => x.Id == assignment.ClassId);
 
             if (classEntity.AmountOfPupils + 1 <= classEntity.MaxAmountOfPupils)
