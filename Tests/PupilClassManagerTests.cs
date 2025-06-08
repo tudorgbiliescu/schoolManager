@@ -1,6 +1,7 @@
 using SchoolManager.Models;
 using SchoolManager.Models.Db;
 using SchoolManager.Models.Diff;
+using SchoolManager.Models.Exceptions;
 using SchoolManager.Services;
 
 namespace SchoolManager.Tests;
@@ -158,10 +159,10 @@ public class PupilClassManagerTests
                 }
             }
         };
-
+        var sut = new PupilClassManager();
         // Act
-        State newState = PupilClassManager.UpdatePupilClassDivision(initialState, incomingRequest);
-        var diff = PupilClassManager.Diff(initialState, newState);
+        State newState =sut.UpdatePupilClassDivision(initialState, incomingRequest);
+        var diff = sut.Diff(initialState, newState);
 
         // Assert
         State expectedState = new State()
@@ -359,9 +360,10 @@ public class PupilClassManagerTests
             }
         };
 
+        var sut = new PupilClassManager();
         // Act
-        State newState = PupilClassManager.UpdatePupilClassDivision(initialState, incomingRequest);
-        var diff = PupilClassManager.Diff(initialState, newState);
+        State newState = sut.UpdatePupilClassDivision(initialState, incomingRequest);
+        var diff = sut.Diff(initialState, newState);
 
         // Assert
         State expectedState = new State()
@@ -461,9 +463,9 @@ public class PupilClassManagerTests
                 }
             }
         };
-
+        var sut = new PupilClassManager();
         // Act & Assert
-        var ex = Assert.Throws<Exception>(() => PupilClassManager.UpdatePupilClassDivision(initialState, incomingRequest));
+        var ex = Assert.Throws<ClassNotFoundException>(() => sut.UpdatePupilClassDivision(initialState, incomingRequest));
         Assert.Equal("Class with id 2 does not exist.", ex.Message);
     }
 
@@ -508,9 +510,10 @@ public class PupilClassManagerTests
                 }
             }
         };
+        var sut = new PupilClassManager();
 
         // Act & Assert
-        var ex = Assert.Throws<Exception>(() => PupilClassManager.UpdatePupilClassDivision(initialState, incomingRequest));
+        var ex = Assert.Throws<PupilNotFoundException>(() => sut.UpdatePupilClassDivision(initialState, incomingRequest));
         Assert.Equal("Pupil with id 3 does not exist.", ex.Message);
     }
 
@@ -566,10 +569,11 @@ public class PupilClassManagerTests
                 }
             }
         };
+        var sut = new PupilClassManager();
 
         // Act & Assert
-        var ex = Assert.Throws<Exception>(() => PupilClassManager.UpdatePupilClassDivision(initialState, incomingRequest));
-        Assert.Equal("Duplicate pupil IDs provided.", ex.Message);
+        var ex = Assert.Throws<MultiplePupilAssignmentsException>(() => sut.UpdatePupilClassDivision(initialState, incomingRequest));
+        Assert.Equal("Duplicate pupil IDs provided: 1.", ex.Message);
     }
 
     [Fact]
@@ -620,9 +624,10 @@ public class PupilClassManagerTests
                 },
             }
         };
+        var sut = new PupilClassManager();
 
         // Act & Assert
-        var ex = Assert.Throws<Exception>(() => PupilClassManager.UpdatePupilClassDivision(initialState, incomingRequest));
+        var ex = Assert.Throws<UnassignedPupilException>(() => sut.UpdatePupilClassDivision(initialState, incomingRequest));
         Assert.Equal("Pupil with id 2 is not assigned to a class.", ex.Message);
     }
 
@@ -674,9 +679,9 @@ public class PupilClassManagerTests
                 },
             }
         };
-
+        var sut = new PupilClassManager();
         // Act & Assert
-        var ex = Assert.Throws<Exception>(() => PupilClassManager.UpdatePupilClassDivision(initialState, incomingRequest));
-        Assert.Equal("Class First grade has too many pupils assigned.", ex.Message);
+        var ex = Assert.Throws<ClassCapacityExceededException>(() => sut.UpdatePupilClassDivision(initialState, incomingRequest));
+        Assert.Equal("Class with id 1 has too many pupils assigned.", ex.Message);
     }
 }

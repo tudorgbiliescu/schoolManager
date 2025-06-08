@@ -5,6 +5,18 @@ namespace SchoolManager.Models.Db;
  */
 public class Class
 {
+    public Class()
+    {
+            
+    }
+    public Class(Class @class)
+    {
+      Id = @class.Id;
+      ClassName = @class.ClassName;
+      TeacherName = @class.TeacherName;
+      MaxAmountOfPupils = @class.MaxAmountOfPupils;
+      AmountOfPupils = @class.AmountOfPupils;
+    }
     public int Id { get; set; }
 
     public string? ClassName { get; set; }
@@ -14,4 +26,5 @@ public class Class
     public int MaxAmountOfPupils { get; set; }
 
     public int AmountOfPupils { get; set; }
+
 }

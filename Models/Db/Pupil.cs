@@ -5,6 +5,17 @@ namespace SchoolManager.Models.Db;
  */
 public class Pupil
 {
+    public Pupil()
+    {
+            
+    }
+    public Pupil(Pupil pupil)
+    {
+      Id = pupil.Id;
+      Name = pupil.Name;
+      ClassName = pupil.ClassName;
+      FollowUpNumber = pupil.FollowUpNumber;
+    }
     public int Id { get; set; }
 
     public string? Name { get; set; }
@@ -12,4 +23,5 @@ public class Pupil
     public string? ClassName { get; set; }
 
     public int? FollowUpNumber { get; set; }
+
 }
